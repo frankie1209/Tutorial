@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <!-- Set the viewport so this responsive site displays correctly on mobile devices -->
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+ <title>Page title </title>
+ <!-- Include bootstrap CSS -->
+ <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"><!-- Include jQuery library -->
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<style>
+#outerbox {position: relative; height: 300px; width: 200px; border: 10px solid brown; 
+	top: 50px; left: 100px}
+#ball { position: relative; top: 0px; left: 0px; width: 50px; height: 50px;
+		border: 25px solid red; border-radius: 25px;}
+</style>
+</head>
+<body>
+<h3>Game Shop</h3>
+<p>Change setting<p>
+ <table class='table'>
+
+         <tbody>
+                           <tr>
+                                <td id="ch-1-label">Height(px)</td>
+                                <td><input size=3  id="ch-1" value="0"></td>
+                            </tr>
+                            <tr>
+                                <td id="ch-2-label">Width(px)</td>
+                           
+                                <td><input size=3 id="ch-2" value="0"></td>
+                            </tr>
+
+                            <tr>
+                                <td id="ch-3-label">Horizontal increment(px)</td>
+                         
+                                <td><input size=3  id="ch-3" value="0"></td>
+                            </tr>
+
+                            <tr>
+                                <td id="ch-4-label">Yincrement(p)</td>
+                             <td><input size=3 id="ch-4" value="0"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+<p><button type='button' id='change'>Change settings</button>			
+<p><button type='button' id='move-me'>Start</button>
+<p><button type='button' id='stop'>STOP</button>
+
+<p><span id='seconds'></span>Seconds</p>
+<div id='outerbox'>
+<div id='ball'>
+</div>
+ </div>
+<script>
+$(function(){
+var step_xsize;
+var step_ysize;
+var ball_radius = parseInt($('#ball').css('width'));
+var moveId;
+var time_id;
+//var start_time;
+step_xsize = 5;
+step_ysize = 5;
+
+	$('#move-me').on('click', function(){
+	$('#seconds').text(0);
+	var time=0;
+	moveId = setInterval(function(){moveBall();}, 20);
+    //stat_time = Number(new Date().getTime());
+	//console.log(stat_time);
+	time_id = setInterval(function(){ 
+					// read current time
+					//var current_time = Number(new Date().getTime());
+					//console.log(current_time);
+					
+					//time=(current_time-start_time);
+					// display it
+					time++;
+					console.log(time);
+					$('#seconds').text(time);
+			}, 1000);
+	//disable a button
+	$('#change').prop("disabled", true);
+	});
+	
+	
+	$('#stop').on('click', function(){
+    clearInterval(moveId);
+	 clearInterval(time_id);
+	$('#change').prop("disabled", false);
+	});
+	
+	$('#change').on('click', function(){
+	$('#ball').css('left','0');
+	$('#ball').css('top','0');
+	var a= $('#ch-1').val();
+	$('#outerbox').css("height",""+a+"");
+	var b= $('#ch-2').val();
+	$('#outerbox').css("width",""+b+"");
+    step_xsize = parseInt($('#ch-3').val());
+    step_ysize = parseInt($('#ch-4').val());
+	
+	});
+	
+	function moveBall(){
+	var box_width = parseInt($('#outerbox').css('width'));
+    var box_height = parseInt($('#outerbox').css('height'));
+		var current_xpos = parseInt($('#ball').css('left'));
+		// change the position
+	   var new_xposition = current_xpos + step_xsize ;
+	   var max_xdistance = box_width - ball_radius -2*parseInt($('#outerbox').css('border-left-width'));
+       var max_ydistance = box_height - ball_radius -2*parseInt($('#outerbox').css('border-left-width'));
+		$('#ball').css('left', new_xposition+'px');
+		if (new_xposition>max_xdistance || new_xposition<0){
+			step_xsize *= -1;}
+		var current_ypos = parseInt($('#ball').css('top'));
+		// change the position
+		var new_yposition = current_ypos + step_ysize ;
+		$('#ball').css('top', new_yposition+'px');
+		if (new_yposition>max_ydistance || new_yposition<0){
+			step_ysize *= -1;
+		}
+	}
+});
+</script>
+</body>
+</html>
